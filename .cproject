@@ -147,6 +147,8 @@
                                     									
                                     <listOptionValue builtIn="false" value="pistache"/>
                                     									
+                                    <listOptionValue builtIn="false" value="rt"/>
+                                    									
                                     <listOptionValue builtIn="false" value="tbb"/>
                                     									
                                     <listOptionValue builtIn="false" value="gomp"/>
@@ -177,7 +179,7 @@
                             							
                             <tool id="nvcc.archiver.1987623133" name="NVCC archiver" superClass="nvcc.archiver"/>
                             							
-                            <tool command="${nvcc} -Xcompiler -fopenmp" id="nvcc.compiler.275251416" name="NVCC Compiler" superClass="nvcc.compiler">
+                            <tool command="${nvcc} -Xcompiler -fopenmp -lrt" id="nvcc.compiler.275251416" name="NVCC Compiler" superClass="nvcc.compiler">
                                 								
                                 <option defaultValue="com.nvidia.cuda.toolchain.compiler.optimization.level3" id="com.nvidia.cuda.toolchain.compiler.optimization.53418711" name="Optimization level" superClass="com.nvidia.cuda.toolchain.compiler.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
                                 								

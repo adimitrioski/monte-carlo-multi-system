@@ -1,6 +1,7 @@
 #include "../../histogram.cuh"
 #include "../../monte_carlo.cuh"
 #include "cpu_monte_carlo.cuh"
+#include <omp.h>
 #include <math.h>
 #include <vector>
 #include <thrust/extrema.h>
@@ -49,8 +50,7 @@ MonteCarloResult cpu_omp_run_monte_carlo_simulation(
 
 	std::vector<float> h_ending_values(monte_carlo_request.num_iterations);
 
-	clock_t cpu_clock;
-	cpu_clock = clock();
+	float start_time = omp_get_wtime();
 
 	thrust::transform(
 			thrust::omp::par,
@@ -73,7 +73,7 @@ MonteCarloResult cpu_omp_run_monte_carlo_simulation(
 	std::vector<unsigned int> h_histogram_counts;
 	cpu_omp_sparse_histogram(h_ending_values, h_histogram_values, h_histogram_counts);
 
-	float simulation_time = (clock() - cpu_clock) / (float)(CLOCKS_PER_SEC / 1000);
+	float simulation_time = (omp_get_wtime() - start_time) * 1000;
 
 	return fillMonteCarloResult(
 			h_histogram_values,

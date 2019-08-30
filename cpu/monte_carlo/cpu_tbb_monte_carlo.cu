@@ -1,6 +1,7 @@
 #include "../../histogram.cuh"
 #include "../../monte_carlo.cuh"
 #include "cpu_monte_carlo.cuh"
+#include <tbb/tick_count.h>
 #include <math.h>
 #include <vector>
 #include <thrust/extrema.h>
@@ -8,6 +9,7 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/system/tbb/execution_policy.h>
+
 
 inline float calculate_mean(
 		std::vector<float> &h_vector,
@@ -49,8 +51,7 @@ MonteCarloResult cpu_tbb_run_monte_carlo_simulation(
 
 	std::vector<float> h_ending_values(monte_carlo_request.num_iterations);
 
-	clock_t cpu_clock;
-	cpu_clock = clock();
+	tbb::tick_count start = tbb::tick_count::now();
 
 	thrust::transform(
 			thrust::tbb::par,
@@ -73,7 +74,9 @@ MonteCarloResult cpu_tbb_run_monte_carlo_simulation(
 	std::vector<unsigned int> h_histogram_counts;
 	cpu_tbb_sparse_histogram(h_ending_values, h_histogram_values, h_histogram_counts);
 
-	float simulation_time = (clock() - cpu_clock) / (float)(CLOCKS_PER_SEC / 1000);
+	tbb::tick_count end = tbb::tick_count::now();
+
+	float simulation_time = (end - start).seconds() * 1000;
 
 	return fillMonteCarloResult(
 			h_histogram_values,
