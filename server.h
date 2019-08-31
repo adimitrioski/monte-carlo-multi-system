@@ -27,6 +27,22 @@ using namespace std;
 
 enum Status { OK, NOK };
 
+enum RunOn {
+	cpu,
+	cpu_omp,
+	cpu_tbb,
+	gpu,
+	undefined
+};
+
+inline RunOn resolveRunOn(string run_on) {
+	if (run_on == "cpu") return RunOn::cpu;
+	else if (run_on == "cpu_omp") return RunOn::cpu_omp;
+	else if (run_on == "cpu_tbb") return RunOn::cpu_tbb;
+	else if (run_on == "gpu") return RunOn::gpu;
+	return RunOn::undefined;
+}
+
 inline Status call_cpu(
 		function<MonteCarloResult(MonteCarloRequest)> f,
 		string ran_on,
